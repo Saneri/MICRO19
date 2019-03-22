@@ -3,11 +3,27 @@
 ; PAREJA 9  
 ;*************************************************************************
 
-CODE SEGMENT BYTE PUBLIC 'CODE'
-ASSUME CS: CODE
-	
+_DATA SEGMENT WORD PUBLIC ‘DATA’
+	PARES		DW	;max 351
+	IMPARES		DW	;max 117  Utilizo dw en ambos para facilitar
+_DATA ENDS
+
+_CODE SEGMENT BYTE PUBLIC 'CODE'
+	ASSUME CS: _CODE, DS:_DATA
+	PUBLIC _computeControlDigit
 _computeControlDigit PROC FAR
+	PUSH BP
+	MOV BP, SP
+	MOV BX, [BP+4]			; unsigned char* barCodeDigits
 	
+	; loop for impaired
+;	MOV CL, 13 				; cantidad de atomos
+;ITER:
+	;CMP CL, 0
+	;JNE ITER
+	MOV AX, 6  				; devuelve 6 para probar si funciona
+	POP BP
+	RET
 _computeControlDigit ENDP
 
 _decodeBarCode PROC FAR	
@@ -78,7 +94,5 @@ ITERINT1:
 	MOV SP+16, BX ;controlDigit [0001]
 	RET
 _decodeBarCode ENDP
-
-INICIO ENDP 
-CODE ENDS 
-END INICIO 
+_CODE ENDS 
+END
