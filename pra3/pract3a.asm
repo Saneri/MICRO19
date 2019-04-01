@@ -10,19 +10,41 @@ _DATA ENDS
 
 _CODE SEGMENT BYTE PUBLIC 'CODE'
 	ASSUME CS: _CODE, DS:_DATA
-	PUBLIC _computeControlDigit
+	PUBLIC _computeControlDigit, _decodeBarCode
 _computeControlDigit PROC FAR
 	PUSH BP
 	MOV BP, SP
-	MOV BX, [BP+4]			; unsigned char* barCodeDigits
+
+	LES BX, [BP+4]		; unsigned char* barCodeDigits
+	MOV CL, 0
+ITER:
+	CMP CL, 12
+	INC CL
+	JGE ENDITER 		; if CL >= 12, end
 	
-	; loop for impaired
-;	MOV CL, 13 				; cantidad de atomos
-;ITER:
-	;CMP CL, 0
-	;JNE ITER
-	MOV AX, 6  				; devuelve 6 para probar si funciona
-	POP BP
+	;MOV CX, [BP+CL] << HOW TO ACCESS??
+	CMP CX, 0  	; acceso para el siguiente posicion del barCodeDigits	
+	JNP IMPAR
+PAR:
+	ADD PARES, CX
+	JMP ITER
+IMPAR:
+	MOV AX, 3
+	MUL CX
+	ADD IMPARES, CX
+	JMP ITER
+ENDITER:
+	MOV CX, 0
+	ADD CX, PARES
+	ADD CX, IMPARES
+	MOV AX, 10
+	DIV CX	 		; AH guarda el resto de la divisi
+	
+	MOV AL, AH
+	MOV AH, 0		; Devuelve resto
+
+	;MOV AX, [BX+2]		; devuelve AX
+	POP BP			; recupera la pila
 	RET
 _computeControlDigit ENDP
 
