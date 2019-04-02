@@ -12,40 +12,52 @@ _CODE SEGMENT BYTE PUBLIC 'CODE'
 	ASSUME CS: _CODE, DS:_DATA
 	PUBLIC _computeControlDigit, _decodeBarCode
 _computeControlDigit PROC FAR
-	PUSH BP
+	PUSH SI DS BX CX DX DI BP
 	MOV BP, SP
 
-	LES BX, [BP+4]		; unsigned char* barCodeDigits
-	MOV CL, 0
-ITER:
-	CMP CL, 12
-	INC CL
-	JGE ENDITER 		; if CL >= 12, end
+	; unsigned char* barCodeDigits
+	MOV SI, [BP+18]			; Offset
+	MOV DS, WORD PTR [BP+20]	; Segment
 	
-	;MOV CX, [BP+CL] << HOW TO ACCESS??
-	CMP CX, 0  	; acceso para el siguiente posicion del barCodeDigits	
+	ADD SI, 36 ; <- hack (36-65)
+	XOR DI, DI  		; DI = 0
+	XOR BX, BX		; cadena para pares
+	XOR CX, CX		; cadena para impares
+ITER:	
+	XOR AX, AX 
+	LODSB			; carga barCodeDigit aAL
+	SUB AL, 48		; str to int
+	
+	INC DI			
+	CMP DI, 12
+	JGE ENDITER 		; if DI >= 11, end
+	
+	CMP AL, 0  		; par o impar	
+	INC SI			; acceso para el siguiente posicion del barCodeDigits
 	JNP IMPAR
-PAR:
-	ADD PARES, CX
+	
+	ADD BX, AX
 	JMP ITER
 IMPAR:
+	PUSH CX
+	MOV CX, AX
 	MOV AX, 3
 	MUL CX
-	ADD IMPARES, CX
+	POP CX
+	ADD CX, AX
+	
 	JMP ITER
 ENDITER:
-	MOV CX, 0
-	ADD CX, PARES
-	ADD CX, IMPARES
-	MOV AX, 10
-	DIV CX	 		; AH guarda el resto de la divisi
-	
-	MOV AL, AH
-	MOV AH, 0		; Devuelve resto
+	XOR AX, AX  		; AX = 0
+	ADD AX, BX
+	ADD AX, CX
+	MOV CX, 000Ah
+	DIV CX	 		; DX guarda el resto de la division
 
-	;MOV AX, [BX+2]		; devuelve AX
-	POP BP			; recupera la pila
+	MOV AX, DX		; devuelve AX
+	POP BP DI DX CX BX DS SI	; recupera la pila
 	RET
+
 _computeControlDigit ENDP
 
 _decodeBarCode PROC FAR	
