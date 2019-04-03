@@ -13,9 +13,9 @@ DATOS SEGMENT
 	MATRIZ			DB		2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' , 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 0, 1 
 	NUMERO			DB		9,'$'
 	NOMBRE			DB		"PABLO ROSALES Y SANTERI SUITIALA",'$'
-	INSTRUCCIONES1	DB		"Ejecutar sin parámetros: muestre el estado de instalación del driver, num de grupo (versión Polibio), nombres de la pareja y las instrucciones de uso.",'$'
-	INSTRUCCIONES2	DB		"Ejecutar con el parámetro /I: instale el driver caso que no lo esté ya.",'$'
-	INSTRUCCIONES3	DB		"Ejecutar con el parámetro /D: desinstale el driver caso de estar instalado .",'$'
+	INSTRUCCIONES1		DB		"Ejecutar sin parámetros: muestre el estado de instalación del driver, num de grupo (versión Polibio), nombres de la pareja y las instrucciones de uso.",'$'
+	INSTRUCCIONES2		DB		"Ejecutar con el parámetro /I: instale el driver caso que no lo esté ya.",'$'
+	INSTRUCCIONES3		DB		"Ejecutar con el parámetro /D: desinstale el driver caso de estar instalado .",'$'
 	CADENA			DB		30 DUP ('$')
 DATOS ENDS 
 
