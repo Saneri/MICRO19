@@ -1,0 +1,28 @@
+
+CODE SEGMENT
+	ASSUME CS:CODE
+	
+	ORG 256
+	
+START:	
+	JMP INSTALLER
+
+RSI PROC FAR
+	IRET
+RSI ENDP
+
+INSTALLER PROC
+	XOR AX, AX			; AX = 0
+	MOV ES, AX
+	MOV AX, OFFSET RSI
+	MOV BX, CS
+	
+	CLI					; disable hardware interrupts
+	MOV ES:[], AX
+	MOV ES:[], BX
+	STI					; enable hardware interrupts
+	INT 27h
+INTALLER ENDP
+
+CODE ENDS
+END START
