@@ -1,7 +1,7 @@
 all: pract4a.com, pract4b.exe, pract4c.exe
 
 pract4a.com: pract4a.obj
-	tlink /t pract4a
+	tlink /v /t pract4a
 pract4a.obj: pract4a.asm
 	tasm /z pract4a.asm
 
