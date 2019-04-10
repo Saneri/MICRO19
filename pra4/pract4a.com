@@ -6,8 +6,15 @@ CODE SEGMENT
 	
 START:	
 	JMP INSTALLER
-
+	
+	; GLOBAL VARIABLES
+	DIR equ 4 * 57H ; INSTALL INT 57H
+	
+	
+	
 RSI PROC FAR
+	
+	
 	IRET
 RSI ENDP
 
@@ -18,9 +25,10 @@ INSTALLER PROC
 	MOV BX, CS
 	
 	CLI					; disable hardware interrupts
-	MOV ES:[], AX
-	MOV ES:[], BX
+	MOV ES:[DIR], AX
+	MOV ES:[DIR+4], BX
 	STI					; enable hardware interrupts
+	MOV DX, OFFSET INSTALLER
 	INT 27h
 INTALLER ENDP
 
