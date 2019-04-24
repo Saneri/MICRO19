@@ -1,0 +1,45 @@
+;**************************************************************************
+; AUTOCAD: PABLO ROSALES Y SANTERI SUITIALA
+; PAREJA 9  
+;**************************************************************************
+
+
+DATOS SEGMENT
+	MENSAJE	DB	10 DUP (?)
+DATOS ENDS
+
+
+PILA SEGMENT STACK "STACK"
+	DB	50H	DUP(0)
+PILA ENDS
+
+
+CODE SEGMENT
+	ASSUME CS:CODE, DS:DATOS, SS:PILA
+
+	INICIO PROC NEAR
+		MOV AX, DATOS
+		MOV DS, AX
+		MOV AX, PILA
+		MOV SS, AX
+		MOV SP, 64
+		
+		CALL PREGUNTAMSG
+		
+
+		; fin del programa
+		MOV AX, 4C00H
+		INT 21H
+	INICIO ENDP
+
+	PREGUNTAMSG PROC NEAR
+		PUSH AX DX
+		MOV AH, 0AH
+		MOV DX, OFFSET MENSAJE
+		INT 21H
+		POP DX AX	
+		RET
+	PREGUNTAMSG ENDP
+CODE ENDS
+
+END INICIO
