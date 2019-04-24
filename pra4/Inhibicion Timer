@@ -1,0 +1,7 @@
+	IN AL, 21H
+	OR AL, 00000001b
+	OUT 21H, AL	;CLI (inhibir timer)
+	
+	IN AL, 21H
+	AND AL, 11111110b
+	OUT 21H, AL	;STI (desinhibit timer)
